@@ -1,0 +1,23 @@
+{
+  "name": "ingredients",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "aws-sdk": "^2.1430.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brendan-mcmahon/ingredients.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/brendan-mcmahon/ingredients/issues"
+  },
+  "homepage": "https://github.com/brendan-mcmahon/ingredients#readme"
+}
