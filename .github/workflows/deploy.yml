@@ -1,0 +1,39 @@
+name: Deploy Lambda
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Zip Lambda function
+        run: |
+          mkdir -p package
+          cp -r index.js package.json package-lock.json package/
+          cd package && npm install --production
+          cd ..
+          cd package && zip -r ../lambda.zip . && cd ..
+
+      - name: Deploy to AWS Lambda
+        uses: appleboy/lambda-action@v0.1.9
+        with:
+          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_region: us-east-2
+          function_name: ingredients
+          zip_file: lambda.zip
