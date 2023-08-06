@@ -71,6 +71,7 @@ exports.handler = async (event) => {
                 'ingredientId': ingredient.id,
                 'name': ingredient.name,
                 'tags': ingredient.tags,
+                'status': ingredient.status,
             }
         };
 
