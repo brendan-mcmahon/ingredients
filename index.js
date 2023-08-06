@@ -69,13 +69,13 @@ exports.handler = async (event) => {
             TableName: 'ingredients',
             Item: {
                 'ingredientId': ingredient.id,
-                'name': ingredient.name
+                'name': ingredient.name,
+                'tags': ingredient.tags,
             }
         };
 
         try {
             await db.put(params).promise();
-            console.log('success?');
             
             return {
                 statusCode: 200,
