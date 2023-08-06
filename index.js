@@ -12,7 +12,7 @@ exports.handler = async (event) => {
 
     // Handle GET request
     if (event.httpMethod === 'GET') {
-        const ingredientId = event.queryStringParameters.ingredientId;
+        const ingredientId = event.queryStringParameters?.ingredientId;
 
         if (!ingredientId) {
             const params = {
