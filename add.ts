@@ -1,11 +1,13 @@
 import * as AWS from "aws-sdk";
 import Ingredient from "./ingredient";
 const db = new AWS.DynamoDB.DocumentClient();
-import { failure, success } from "./responses";
+import { error, failure, success } from "./responses";
 
 export default async function add(ingredient: Ingredient) {
-    // const ingredient = JSON.parse(event.body);
         console.log('ingredient', ingredient);
+        if (!ingredient.ingredientId) {
+            return error(`ingredientId is required:\n${JSON.stringify(ingredient)}`, 400);
+        }
 
         const params = {
             TableName: 'ingredients',
