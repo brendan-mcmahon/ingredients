@@ -6,7 +6,10 @@
   "dependencies": {
     "aws-sdk": "^2.1430.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.119",
+    "typescript": "^5.1.6"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

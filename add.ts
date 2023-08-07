@@ -1,14 +1,16 @@
-const AWS = require("aws-sdk");
+import * as AWS from "aws-sdk";
+import Ingredient from "./ingredient";
+import { headers } from "./headers";
 const db = new AWS.DynamoDB.DocumentClient();
 
-export default async function add(ingredient) {
+export default async function add(ingredient: Ingredient) {
     // const ingredient = JSON.parse(event.body);
         console.log('ingredient', ingredient);
 
         const params = {
             TableName: 'ingredients',
             Item: {
-                'ingredientId': ingredient.id,
+                'ingredientId': ingredient.ingredientId,
                 'name': ingredient.name,
                 'tags': ingredient.tags,
                 'status': ingredient.status,

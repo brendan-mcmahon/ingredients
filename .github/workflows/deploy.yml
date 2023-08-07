@@ -21,10 +21,13 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Build TypeScript
+        run: npx tsc
+
       - name: Zip Lambda function
         run: |
           mkdir -p package
-          cp -r index.js package.json package-lock.json package/
+          cp -r dist index.js package.json package-lock.json package/ # Copying compiled JavaScript from 'dist' directory
           cd package && npm install --production
           cd ..
           cd package && zip -r ../lambda.zip . && cd ..

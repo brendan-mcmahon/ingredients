@@ -1,13 +1,15 @@
-const AWS = require("aws-sdk");
-const db = new AWS.DynamoDB.DocumentClient();
+import * as aws from "aws-sdk";
+import { headers } from "./headers";
+import Ingredient from "./ingredient";
+const db = new aws.DynamoDB.DocumentClient();
 
-export default async function update(ingredientId, ingredient) {
+export default async function update(ingredient: Ingredient) {
     console.log("updating ingredient:", ingredient);
 
     const params = {
       TableName: "ingredients",
       Key: {
-        ingredientId: ingredient.id,
+        ingredientId: ingredient.ingredientId,
       },
       UpdateExpression: "set #name = :name, #tags = :tags, #status = :status",
       ExpressionAttributeNames: {

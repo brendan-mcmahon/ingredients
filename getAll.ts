@@ -1,20 +1,18 @@
-const AWS = require("aws-sdk");
+import * as AWS from "aws-sdk";
+import { headers } from "./headers";
 const db = new AWS.DynamoDB.DocumentClient();
 
-export default async function get(ingredientId) {
+export default async function getAll(){
     const params = {
-        TableName: 'ingredients',
-        Key: {
-            'ingredientId': ingredientId
-        }
+        TableName: 'ingredients'
     };
 
     try {
-        const result = await db.get(params).promise();
+        const result = await db.scan(params).promise();
         return {
             statusCode: 200,
             headers,
-            body: JSON.stringify(result.Item),
+            body: JSON.stringify(result.Items),
         };
     } catch (dbError) {
         console.log('error', dbError);
@@ -23,5 +21,5 @@ export default async function get(ingredientId) {
             headers,
             body: JSON.stringify(dbError),
         };
-    }
+    } 
 }
