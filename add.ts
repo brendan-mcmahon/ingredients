@@ -1,7 +1,7 @@
 import * as AWS from "aws-sdk";
 import Ingredient from "./ingredient";
-import { headers } from "./headers";
 const db = new AWS.DynamoDB.DocumentClient();
+import { failure, success } from "./responses";
 
 export default async function add(ingredient: Ingredient) {
     // const ingredient = JSON.parse(event.body);
@@ -19,18 +19,9 @@ export default async function add(ingredient: Ingredient) {
 
         try {
             await db.put(params).promise();
-            
-            return {
-                statusCode: 200,
-                headers,
-                body: JSON.stringify(params.Item),
-            };
+            return success(params.Item);
         } catch (dbError) {
             console.log('error', dbError);
-            return {
-                statusCode: 500,
-                headers,
-                body: JSON.stringify(dbError),
-            };
+            return failure(dbError);
         }
 }
