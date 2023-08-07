@@ -27,7 +27,7 @@ jobs:
       - name: Zip Lambda function
         run: |
           mkdir -p package
-          cp -r dist index.js package.json package-lock.json package/ # Copying compiled JavaScript from 'dist' directory
+          cp -r dist/* package.json package-lock.json package/ # Copying compiled JavaScript from 'dist' directory
           cd package && npm install --production
           cd ..
           cd package && zip -r ../lambda.zip . && cd ..
