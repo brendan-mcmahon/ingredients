@@ -1,5 +1,5 @@
 import * as AWS from "aws-sdk";
-import { headers } from "./headers";
+import { failure, success } from "./responses";
 const db = new AWS.DynamoDB.DocumentClient();
 
 export default async function getAll(){
@@ -9,17 +9,9 @@ export default async function getAll(){
 
     try {
         const result = await db.scan(params).promise();
-        return {
-            statusCode: 200,
-            headers,
-            body: JSON.stringify(result.Items),
-        };
+        return success(result.Items);
     } catch (dbError) {
         console.log('error', dbError);
-        return {
-            statusCode: 500,
-            headers,
-            body: JSON.stringify(dbError),
-        };
+        return failure(dbError);
     } 
 }

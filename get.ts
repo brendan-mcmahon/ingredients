@@ -1,6 +1,5 @@
-import { headers } from "./headers";
-
 import * as AWS from "aws-sdk";
+import { failure, success } from "./responses";
 const db = new AWS.DynamoDB.DocumentClient();
 
 export default async function get(ingredientId: string) {
@@ -13,17 +12,9 @@ export default async function get(ingredientId: string) {
 
     try {
         const result = await db.get(params).promise();
-        return {
-            statusCode: 200,
-            headers,
-            body: JSON.stringify(result.Item),
-        };
+        return success(result.Item);
     } catch (dbError) {
         console.log('error', dbError);
-        return {
-            statusCode: 500,
-            headers,
-            body: JSON.stringify(dbError),
-        };
+        return failure(dbError);
     }
 }
