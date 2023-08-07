@@ -1,142 +1,29 @@
-const AWS = require('aws-sdk');
-
-const db = new AWS.DynamoDB.DocumentClient();
+const getAll = require("./getAll");
+const get = require("./get");
+const add = require("./add");
+const update = require("./update");
 
 exports.handler = async (event) => {
-    console.log('event', event);
-    
-    const headers = {
-        "Access-Control-Allow-Origin": "*", // Adjust this for production!
-        "Access-Control-Allow-Credentials": true
-    };
+  console.log("event", event);
 
-    // Handle GET request
-    if (event.httpMethod === 'GET') {
-        const ingredientId = event.queryStringParameters?.ingredientId;
+  const headers = {
+    "Access-Control-Allow-Origin": "*", // Adjust this for production!
+    "Access-Control-Allow-Credentials": true,
+  };
 
-        if (!ingredientId) {
-            const params = {
-                TableName: 'ingredients'
-            };
-    
-            try {
-                const result = await db.scan(params).promise();
-                return {
-                    statusCode: 200,
-                    headers,
-                    body: JSON.stringify(result.Items),
-                };
-            } catch (dbError) {
-                console.log('error', dbError);
-                return {
-                    statusCode: 500,
-                    headers,
-                    body: JSON.stringify(dbError),
-                };
-            }
-        }
-
-        const params = {
-            TableName: 'ingredients',
-            Key: {
-                'ingredientId': ingredientId
-            }
+  const ingredientId = event.queryStringParameters?.ingredientId;
+  switch (event.httpMethod) {
+    case "GET":
+        return ingredientId ? await get(ingredientId) : await getAll();
+    case "POST":
+        return await add(JSON.parse(event.body));
+    case "PUT":
+        return await update(ingredientId, JSON.parse(event.body));
+    default:
+        return {
+            statusCode: 405,
+            headers,
+            body: "Method Not Allowed",
         };
-
-        try {
-            const result = await db.get(params).promise();
-            return {
-                statusCode: 200,
-                headers,
-                body: JSON.stringify(result.Item),
-            };
-        } catch (dbError) {
-            console.log('error', dbError);
-            return {
-                statusCode: 500,
-                headers,
-                body: JSON.stringify(dbError),
-            };
-        }
     }
-
-    if (event.httpMethod === 'PUT') {
-        const ingredient = JSON.parse(event.body);
-        console.log('ingredient', ingredient);
-
-        const params = {
-            TableName: 'ingredients',
-            Key: {
-                'ingredientId': ingredient.id
-            },
-            UpdateExpression: 'set #name = :name, #tags = :tags, #status = :status',
-            ExpressionAttributeNames: {
-                '#name': 'name',
-                '#tags': 'tags',
-                '#status': 'status',
-            },
-            ExpressionAttributeValues: {
-                ':name': ingredient.name,
-                ':tags': ingredient.tags,
-                ':status': ingredient.status,
-            },
-            ReturnValues: 'ALL_NEW'
-        };
-
-        try {
-            const result = await db.update(params).promise();
-            return {
-                statusCode: 200,
-                headers,
-                body: JSON.stringify(result.Attributes),
-            };
-        } catch (dbError) {
-            console.log('error', dbError);
-            return {
-                statusCode: 500,
-                headers,
-                body: JSON.stringify(dbError),
-            };
-        }
-    }
-
-    // Handle POST request
-    if (event.httpMethod === 'POST') {
-        const ingredient = JSON.parse(event.body);
-        console.log('ingredient', ingredient);
-
-        const params = {
-            TableName: 'ingredients',
-            Item: {
-                'ingredientId': ingredient.id,
-                'name': ingredient.name,
-                'tags': ingredient.tags,
-                'status': ingredient.status,
-            }
-        };
-
-        try {
-            await db.put(params).promise();
-            
-            return {
-                statusCode: 200,
-                headers,
-                body: JSON.stringify(params.Item),
-            };
-        } catch (dbError) {
-            console.log('error', dbError);
-            return {
-                statusCode: 500,
-                headers,
-                body: JSON.stringify(dbError),
-            };
-        }
-    }
-
-    // Return method not allowed if neither GET nor POST
-    return {
-        statusCode: 405,
-        headers,
-        body: 'Method Not Allowed',
-    };
 };
