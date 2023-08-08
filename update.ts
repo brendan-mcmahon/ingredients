@@ -14,14 +14,16 @@ export default async function update(ingredient: Ingredient) {
     Key: {
       ingredientId: ingredient.ingredientId,
     },
-    UpdateExpression: "set #name = :name, #tags = :tags, #status = :status",
+    UpdateExpression: "set #name = :name, #type = :type, #tags = :tags, #status = :status",
     ExpressionAttributeNames: {
       "#name": "name",
+      "#type": "type",
       "#tags": "tags",
       "#status": "status",
     },
     ExpressionAttributeValues: {
       ":name": ingredient.name,
+      ":type": ingredient.type,
       ":tags": ingredient.tags,
       ":status": ingredient.status,
     },

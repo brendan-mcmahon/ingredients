@@ -14,6 +14,7 @@ export default async function add(ingredient: Ingredient) {
             Item: {
                 'ingredientId': ingredient.ingredientId,
                 'name': ingredient.name,
+                'type': ingredient.type,
                 'tags': ingredient.tags,
                 'status': ingredient.status,
             }
