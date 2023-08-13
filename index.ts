@@ -8,8 +8,11 @@ import handleDelete from "./delete";
 
 export const handler = async (event: APIGatewayProxyEvent) => {
   console.log("event", event);
+  console.log("event.httpMethod", event.httpMethod);
 
   const ingredientId = event.queryStringParameters?.ingredientId;
+
+  console.log("ingredientId", ingredientId);
 
   switch (event.httpMethod) {
     case "GET":
