@@ -3,7 +3,7 @@ import Ingredient from "./ingredient";
 import { error, failure, success } from "./responses";
 const db = new aws.DynamoDB.DocumentClient();
 
-export default async function update(ingredient: Ingredient) {
+export default async function handleUpdate(ingredient: Ingredient) {
   console.log("updating ingredient:", ingredient);
   if (!ingredient.ingredientId) {
       return error(`ingredientId is required:\n${JSON.stringify(ingredient)}`, 400);
