@@ -8,13 +8,31 @@ export default async function handleUpdate(ingredient: Ingredient) {
   if (!ingredient.ingredientId) {
       return error(`ingredientId is required:\n${JSON.stringify(ingredient)}`, 400);
   }
-
+  
+  const updateExpressionParts = [
+    "#name = :name",
+    "#type = :type",
+    "#tags = :tags",
+    "#status = :status"
+  ];
+  const expressionAttributeValues: any = {
+    ":name": ingredient.name,
+    ":type": ingredient.type,
+    ":tags": ingredient.tags,
+    ":status": ingredient.status
+  };
+  
+  if (ingredient.statusDate) {
+    updateExpressionParts.push("#statusDate = :statusDate");
+    expressionAttributeValues[":statusDate"] = ingredient.statusDate;
+  }
+  
   const params = {
     TableName: "ingredients",
     Key: {
       ingredientId: ingredient.ingredientId,
     },
-    UpdateExpression: "set #name = :name, #type = :type, #tags = :tags, #status = :status, #statusDate = :statusDate",
+    UpdateExpression: "set " + updateExpressionParts.join(", "),
     ExpressionAttributeNames: {
       "#name": "name",
       "#type": "type",
@@ -22,16 +40,10 @@ export default async function handleUpdate(ingredient: Ingredient) {
       "#status": "status",
       "#statusDate": "statusDate",
     },
-    ExpressionAttributeValues: {
-      ":name": ingredient.name,
-      ":type": ingredient.type,
-      ":tags": ingredient.tags,
-      ":status": ingredient.status,
-      ":statusDate": ingredient.statusDate,
-    },
+    ExpressionAttributeValues: expressionAttributeValues,
     ReturnValues: "ALL_NEW",
   };
-
+  
   try {
     const result = await db.update(params).promise();
     return success(result.Attributes);
@@ -39,4 +51,5 @@ export default async function handleUpdate(ingredient: Ingredient) {
     console.log("error", dbError);
     return failure(dbError);
   }
+  
 }
