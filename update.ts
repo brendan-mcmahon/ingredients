@@ -32,8 +32,6 @@ export default async function handleUpdate(ingredient: Ingredient) {
     updateExpressionParts.push("#statusDate = :statusDate");
     expressionAttributeValues[":statusDate"] = ingredient.statusDate;
     expressionAttributeNames["#statusDate"] = "statusDate";
-  } else {
-    updateExpressionParts.push("REMOVE #statusDate");
   }
   
   const params = {
