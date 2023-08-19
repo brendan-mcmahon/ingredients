@@ -14,18 +14,20 @@ export default async function handleUpdate(ingredient: Ingredient) {
     Key: {
       ingredientId: ingredient.ingredientId,
     },
-    UpdateExpression: "set #name = :name, #type = :type, #tags = :tags, #status = :status",
+    UpdateExpression: "set #name = :name, #type = :type, #tags = :tags, #status = :status, #statusDate = :statusDate",
     ExpressionAttributeNames: {
       "#name": "name",
       "#type": "type",
       "#tags": "tags",
       "#status": "status",
+      "#statusDate": "statusDate",
     },
     ExpressionAttributeValues: {
       ":name": ingredient.name,
       ":type": ingredient.type,
       ":tags": ingredient.tags,
       ":status": ingredient.status,
+      ":statusDate": ingredient.statusDate,
     },
     ReturnValues: "ALL_NEW",
   };

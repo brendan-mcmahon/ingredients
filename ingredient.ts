@@ -4,4 +4,5 @@ export default interface Ingredient {
     type: number;
     tags: string[];
     status: number;
+    statusDate: Date | null;
 }
