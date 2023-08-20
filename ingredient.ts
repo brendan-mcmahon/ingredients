@@ -5,4 +5,5 @@ export default interface Ingredient {
     tags: string[];
     status: number;
     statusDate: Date | null;
+    expirationDate: Date | null;
 }

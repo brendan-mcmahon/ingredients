@@ -33,6 +33,12 @@ export default async function handleUpdate(ingredient: Ingredient) {
     expressionAttributeValues[":statusDate"] = ingredient.statusDate;
     expressionAttributeNames["#statusDate"] = "statusDate";
   }
+
+  if (ingredient.expirationDate) {
+    updateExpressionParts.push("#expirationDate = :expirationDate");
+    expressionAttributeValues[":expirationDate"] = ingredient.expirationDate;
+    expressionAttributeNames["#expirationDate"] = "expirationDate";
+  }
   
   const params = {
     TableName: "ingredients",
