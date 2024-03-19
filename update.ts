@@ -35,15 +35,16 @@ export default async function handleUpdate(ingredient: Ingredient) {
     expressionAttributeNames["#statusDate"] = "statusDate";
   }
 
-  if (typeof ingredient.expirationDate !== 'undefined') {
-    if (ingredient.expirationDate === null) {
-      removeExpressionParts.push("#expirationDate");
-    } else {
-      updateExpressionParts.push("#expirationDate = :expirationDate");
-      expressionAttributeValues[":expirationDate"] = ingredient.expirationDate;
-      expressionAttributeNames["#expirationDate"] = "expirationDate";
-    }
+if (typeof ingredient.expirationDate !== 'undefined') {
+  if (ingredient.expirationDate === null) {
+    removeExpressionParts.push("#expirationDate");
+    expressionAttributeNames["#expirationDate"] = "expirationDate";
+  } else {
+    updateExpressionParts.push("#expirationDate = :expirationDate");
+    expressionAttributeValues[":expirationDate"] = ingredient.expirationDate;
+    expressionAttributeNames["#expirationDate"] = "expirationDate";
   }
+}
 
   let updateExpression = "set " + updateExpressionParts.join(", ");
   if (removeExpressionParts.length > 0) {
