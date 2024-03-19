@@ -15,6 +15,7 @@ export default async function handleUpdate(ingredient: Ingredient) {
     "#tags = :tags",
     "#status = :status"
   ];
+  const removeExpressionParts = [];
   const expressionAttributeValues: any = {
     ":name": ingredient.name,
     ":type": ingredient.type,
@@ -34,10 +35,19 @@ export default async function handleUpdate(ingredient: Ingredient) {
     expressionAttributeNames["#statusDate"] = "statusDate";
   }
 
-  if (ingredient.expirationDate) {
-    updateExpressionParts.push("#expirationDate = :expirationDate");
-    expressionAttributeValues[":expirationDate"] = ingredient.expirationDate;
-    expressionAttributeNames["#expirationDate"] = "expirationDate";
+  if (typeof ingredient.expirationDate !== 'undefined') {
+    if (ingredient.expirationDate === null) {
+      removeExpressionParts.push("#expirationDate");
+    } else {
+      updateExpressionParts.push("#expirationDate = :expirationDate");
+      expressionAttributeValues[":expirationDate"] = ingredient.expirationDate;
+      expressionAttributeNames["#expirationDate"] = "expirationDate";
+    }
+  }
+
+  let updateExpression = "set " + updateExpressionParts.join(", ");
+  if (removeExpressionParts.length > 0) {
+    updateExpression += " REMOVE " + removeExpressionParts.join(", ");
   }
   
   const params = {
@@ -45,7 +55,7 @@ export default async function handleUpdate(ingredient: Ingredient) {
     Key: {
       ingredientId: ingredient.ingredientId,
     },
-    UpdateExpression: "set " + updateExpressionParts.join(", "),
+    UpdateExpression: updateExpression,
     ExpressionAttributeNames: expressionAttributeNames,
     ExpressionAttributeValues: expressionAttributeValues,
     ReturnValues: "ALL_NEW",
@@ -58,5 +68,4 @@ export default async function handleUpdate(ingredient: Ingredient) {
     console.log("error", dbError);
     return failure(dbError);
   }
-  
 }
