@@ -13,20 +13,23 @@ export default async function handleUpdate(ingredient: Ingredient) {
     "#name = :name",
     "#type = :type",
     "#tags = :tags",
-    "#status = :status"
+    "#status = :status",
+    "#location = :location"
   ];
   const removeExpressionParts = [];
   const expressionAttributeValues: any = {
     ":name": ingredient.name,
     ":type": ingredient.type,
     ":tags": ingredient.tags,
-    ":status": ingredient.status
+    ":status": ingredient.status,
+    ":location": ingredient.location
   };
   const expressionAttributeNames: any = {
     "#name": "name",
     "#type": "type",
     "#tags": "tags",
-    "#status": "status"
+    "#status": "status",
+    "#location": "location"
   };
   
   if (ingredient.statusDate) {

@@ -16,6 +16,7 @@ export default async function handleAdd(ingredient: Ingredient) {
       name: ingredient.name,
       type: ingredient.type,
       tags: ingredient.tags,
+      location: ingredient.location,
       status: ingredient.status,
     } as Ingredient,
   };
