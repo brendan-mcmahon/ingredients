@@ -4,7 +4,7 @@ export default interface Ingredient {
     type: number;
     tags: string[];
     status: number;
-    location: number;
+    location: number | null;
     statusDate: Date | null;
     expirationDate: Date | null;
 }
