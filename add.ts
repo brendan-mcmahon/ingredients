@@ -32,5 +32,7 @@ export default async function handleAdd(ingredient: Ingredient) {
   } catch (dbError) {
     console.log("error", dbError);
     return failure(dbError);
+  } finally {
+    console.log("done");
   }
 }
