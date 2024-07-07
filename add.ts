@@ -27,6 +27,7 @@ export default async function handleAdd(ingredient: Ingredient) {
 
   try {
     await db.put(params).promise();
+    console.log("successfully added", params.Item);
     return success(params.Item);
   } catch (dbError) {
     console.log("error", dbError);
